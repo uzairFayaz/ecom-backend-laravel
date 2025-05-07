@@ -30,6 +30,7 @@ class ProductController extends Controller
             'product_name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
+            'status' => 'required|in:active,inactive',
             'stock_quantity' => 'required|integer|min:0',
             'description' => 'nullable|string',
         ]);
@@ -50,6 +51,7 @@ class ProductController extends Controller
             'product_name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
+            'status' => 'required|in:active,inactive',
             'stock_quantity' => 'required|integer|min:0',
             'description' => 'nullable|string',
         ]);

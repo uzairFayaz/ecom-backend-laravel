@@ -13,10 +13,17 @@ class CartController extends Controller
     public function index()
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please log in to view your cart.');
+            return redirect()
+                ->route('login')
+                ->with('error', 'Please log in to view your cart.');
         }
 
-        $items = Auth::user()->carts()->with(['product', 'variant'])->get();
+        $items = Auth::user()->carts()
+            ->with(['product', 'variant'])
+            ->whereHas('product', function ($query) {
+                $query->where('status', 'active')->whereNull('deleted_at');
+            })
+            ->get();
 
         return view('cart.index', compact('items'));
     }
@@ -32,7 +39,15 @@ class CartController extends Controller
             'variant_id' => 'nullable|exists:product_variants,id',
         ]);
 
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::where('id', $request->product_id)
+            ->where('status', 'active')
+            ->whereNull('deleted_at')
+            ->first();
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product is no longer available.');
+        }
+
         $variant = $request->variant_id ? ProductVariant::find($request->variant_id) : null;
 
         // Validate stock

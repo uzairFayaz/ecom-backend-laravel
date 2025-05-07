@@ -13,7 +13,6 @@ class ProductController extends Controller
     {
         $products = Product::with('category', 'variants')
             ->where('status', 'active')
-            ->where('deleted_at')
             ->orderBy('product_name')
             ->paginate(12);
         return view('products.index', compact('products'));

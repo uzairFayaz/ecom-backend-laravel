@@ -17,7 +17,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach ($products as $product)
                                 <div class="border p-4 rounded-lg">
-                                    <a href="{{ route('products.show', $product) }}">
+                                    <a href="{{ route('products.show', $product->id) }}">
                                         @if ($product->image)
                                             <img src="{{ $product->image_url }}" alt="{{ $product->product_name }}" class="h-48 w-full object-cover mb-4">
                                         @else
@@ -52,7 +52,12 @@
                                                     @enderror
                                                 @endif
                                                 <button type="submit" class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded">Add to Cart</button>
-                                                <button type="submit" class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded">Add to Wishlist</button>
+                                            </form>
+                                            <!-- Separate form for wishlist -->
+                                            <form action="{{ route('wishlist.add') }}" method="POST" class="mt-2">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Add to Wishlist</button>
                                             </form>
                                         </div>
                                     @else

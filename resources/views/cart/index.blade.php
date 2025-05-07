@@ -9,59 +9,43 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1>Your Cart</h1>
-                    @if (session('success'))
-                        <p class="text-green-600">{{ session('success') }}</p>
-                    @endif
-                    @if (session('error'))
-                        <p class="text-red-600">{{ session('error') }}</p>
-                    @endif
-                    @if ($items->isEmpty())
-                        <p>Your cart is empty.</p>
-                        <a href="{{ route('products.index') }}" class="text-indigo-600 hover:text-indigo-800">Continue Shopping</a>
-                    @else
-                        <table class="w-full table-auto">
-                            <thead>
-                            <tr>
-                                <th class="px-4 py-2">Image</th>
-                                <th class="px-4 py-2">Product</th>
-                                <th class="px-4 py-2">Variant</th>
-                                <th class="px-4 py-2">Price</th>
-                                <th class="px-4 py-2">Quantity</th>
-                                <th class="px-4 py-2">Total</th>
-                                <th class="px-4 py-2">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($items as $item)
-                                <tr>
-                                    <td class="border px-4 py-2">
-                                        <img src="{{ $item->product->image_url }}" alt="{{ $item->product->product_name }}" class="h-16 w-16 object-cover">
-                                    </td>
-                                    <td class="border px-4 py-2">{{ $item->product->product_name }}</td>
-                                    <td class="border px-4 py-2">{{ $item->variant ? $item->variant->name : 'N/A' }}</td>
-                                    <td class="border px-4 py-2">${{ number_format($item->price, 2) }}</td>
-                                    <td class="border px-4 py-2">{{ $item->quantity }}</td>
-                                    <td class="border px-4 py-2">${{ number_format($item->price * $item->quantity, 2) }}</td>
-                                    <td class="border px-4 py-2">
-                                        <form action="{{ route('cart.remove', $item->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Remove this item?')">Remove</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            <div class="mt-6">
-                                <p>Total: ${{ number_format($items->sum(fn($item) => $item->price * $item->quantity), 2) }}</p>
-                                <a href="{{ route('checkout.index') }}" class="mt-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded">Proceed to Checkout</a>
-                                <a href="{{ route('products.index') }}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800">Continue Shopping</a>
+                    <h1>Shopping Cart</h1>
+                    @forelse ($items as $cart)
+                        @if ($cart->product)
+                            <div class="border p-4 rounded-lg mb-4">
+                                <div class="flex items-center">
+                                    <img src="{{ $cart->product->image_url }}" alt="{{ $cart->product->product_name }}" class="h-16 w-16 object-cover mr-4">
+                                    <div>
+                                        <h2 class="text-lg font-semibold">{{ $cart->product->product_name }}</h2>
+                                        <p>Quantity: {{ $cart->quantity }}</p>
+                                        <p>Price: ${{ number_format($cart->price, 2) }}</p>
+                                        @if ($cart->variant_id)
+                                            <p>Variant: {{ $cart->variant->name }} (+${{ number_format($cart->variant->additional_price, 2) }})</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <form action="{{ route('cart.remove', $cart->id) }}" method="POST" class="mt-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800">Remove</button>
+                                </form>
                             </div>
-                            </tbody>
-                        </table>
+                        @else
+                            <div class="border p-4 rounded-lg mb-4 text-red-600">
+                                <p>Product not available (ID: {{ $cart->product_id }}). Please remove this item.</p>
+                                <form action="{{ route('cart.remove', $cart->id) }}" method="POST" class="mt-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800">Remove</button>
+                                </form>
+                            </div>
+                        @endif
+                    @empty
+                        <p class="text-center text-gray-500">Your cart is empty.</p>
+                    @endforelse
+                    @if ($items->isNotEmpty())
                         <div class="mt-6">
-                            <p>Total: ${{ number_format($items->sum(fn($item) => $item->price * $item->quantity), 2) }}</p>
-                            <a href="{{ route('products.index') }}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800">Continue Shopping</a>
+                            <a href="{{ route('checkout.index') }}" class="bg-indigo-600 text-white px-4 py-2 rounded">Proceed to Checkout</a>
                         </div>
                     @endif
                 </div>

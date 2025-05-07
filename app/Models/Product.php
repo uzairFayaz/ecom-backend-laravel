@@ -25,17 +25,17 @@ class Product extends Model
         'status' => 'string',
     ];
     public function cart(){
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Cart::class,'product_id');
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class ,'category_id');
     }
 
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductVariant::class,'product_id');
     }
     public function getImageUrlAttribute()
     {

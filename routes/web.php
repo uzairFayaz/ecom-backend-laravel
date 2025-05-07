@@ -37,7 +37,8 @@ require __DIR__.'/auth.php';
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{products}', [ProductController::class, 'show'])->name('products.show');
 
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories',
+    [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Authenticated user routes
