@@ -55,7 +55,7 @@
                         @if ($products instanceof LengthAwarePaginator)
                             {{ $products->appends(request()->query())->links() }}
                         @else
-                            <p class="text-center text-gray-500">Pagination not available.</p>
+                            <p class="text-center text-gray-500"></p>
                         @endif
                     </div>
                 </div>
