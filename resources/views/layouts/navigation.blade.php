@@ -2,17 +2,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
+                <a href="{{ route('home') }}" class="flex items-center">
+                    <span class="text-xl font-bold text-gray-800">Home</span>
+                </a>
 
-                    <a href="{{route('home')}}" class="flex items-center">
-                        <span class="text-xl font-bold text-gray-800">Home</span>
-                    </a>
-
-
-        {{--<a href="{{ route('home') }}"
-                   class="flex items-center">
-                    <img src="{{ asset('images/logo.png') }}" alt="Your Brand Logo" class="h-8 w-auto">
-                    {{ config('app.name', 'Home') }}
-                </a>--}}
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px p-4 sm:ml-10 sm:flex">
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
@@ -37,7 +30,7 @@
                 </div>
             </div>
             <!-- User Menu -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-8 ">
+            <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-8">
                 @auth
                     <x-dropdown>
                         <x-slot name="trigger">
@@ -51,12 +44,16 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        <x-dropdown-link :href="route('logout')" method="post">
-                            {{ __('Log Out') }}
-                        </x-dropdown-link>
+                        <!-- Explicitly render a form for logout -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out text-start">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
                     </x-dropdown>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 bg-indigo-500 ">{{ __('Log in') }}</a>
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 bg-indigo-500">{{ __('Log in') }}</a>
                     <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700">{{ __('Register') }}</a>
                 @endauth
             </div>

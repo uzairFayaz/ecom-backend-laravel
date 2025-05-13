@@ -13,8 +13,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->whereNull('deleted_at')->paginate(10);
-
+        $products = Product::with('category')->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
@@ -60,30 +59,20 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Product updated.');
     }
 
-   /* public function destroy(Product $product)
-    {
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Product deleted.');
-    }
-    public function destroy(Product $product)
-    {
-        // Delete related cart items
-        Cart::where('product_id', $product->id)->delete();
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Product deleted.');
-    }*/
     public function destroy(Product $product): RedirectResponse
     {
         try {
-            $product->delete();
-            return redirect()->route('admin.products.index')->with('success', 'Category deleted successfully.');
+            // Delete related cart items
+            Cart::where('product_id', $product->id)->delete();
+            // Add similar lines for other related tables if needed (e.g., Wishlist)
+
+            // Permanently delete the product
+            $product->forceDelete();
+
+            return redirect()->route('admin.products.index')->with('success', 'Product permanently deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.products.index')->with('error', 'Cannot delete category; it may have products or subcategories.');
+            \Log::error('Failed to permanently delete product:', ['product_id' => $product->id, 'error' => $e->getMessage()]);
+            return redirect()->route('admin.products.index')->with('error', 'Failed to permanently delete product: ' . $e->getMessage());
         }
     }
-
-
-
-
-
 }
