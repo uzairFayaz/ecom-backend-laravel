@@ -12,12 +12,19 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::with(['children', 'products' => function ($query) {
-            $query->where('status', 'active');
-        }])
-            ->whereNull('parent_cat_id')
+            $query
+                ->where('status', 'active');
+        }])->whereNull('parent_cat_id')
             ->where('status', 'active')
             ->get();
 
+
+
         return response()->json($categories);
+    }
+
+    public function getProducts(Request $request){
+        $products = Product::all();
+        return response()->json($products);
     }
 }

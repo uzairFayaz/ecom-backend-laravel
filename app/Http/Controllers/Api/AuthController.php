@@ -131,7 +131,7 @@ class AuthController extends Controller
                 'message' => 'invalid token'
             ],401);
         }
-       $request->$user->currentAccessTokens()->delete();
+       $request->$user->currentAccessToken()->delete();
         return response()->json([
             'status' => true,
             'user' => $user,

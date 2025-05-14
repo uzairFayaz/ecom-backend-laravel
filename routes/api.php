@@ -15,3 +15,4 @@ Route::post('login', [AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout']);
 Route::get('getUsers',[AuthController::class,'getUser']);
 Route::post('signup',[AuthController::class, 'signup']);
+Route::get('getProducts',[CategoryController::class,'getProducts']);
