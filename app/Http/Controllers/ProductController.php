@@ -41,7 +41,8 @@ class ProductController extends Controller
 
         if(Auth::user()){
 
-            $product->load('category', 'variants')->whereNull('deleted_at');
+
+            $product->load('category', 'variants');
             return view('products.show', compact('product'));
         }
         return view('products.show', compact('product'));
