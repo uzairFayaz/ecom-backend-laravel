@@ -16,18 +16,18 @@
                         <form action="{{ route('admin.categories.store') }}" method="POST">
                             @csrf
                             <div class="mb-4">
-                                <label for="category_name" class="block text-sm font-medium text-gray-700">Category Name</label> <!-- Changed to 'Category Name' -->
+                                <label for="category_name" class="block text-sm font-medium text-gray-700">Category Name</label>
                                 <input type="text" name="category_name" id="category_name" value="{{ old('category_name') }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                                 @error('category_name')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="mb-4">
-                                <label for="parent_cat_id" class="block text-sm font-medium text-gray-700">Parent Category</label> <!-- Added -->
+                                <label for="parent_cat_id" class="block text-sm font-medium text-gray-700">Parent Category</label>
                                 <select name="parent_cat_id" id="parent_cat_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                                     <option value="" {{ old('parent_cat_id') == '' ? 'selected' : '' }}>None</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('parent_cat_id') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                                    @foreach ($categoryOptions as $id => $name)
+                                        <option value="{{ $id }}" {{ old('parent_cat_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
                                 @error('parent_cat_id')

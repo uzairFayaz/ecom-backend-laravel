@@ -16,3 +16,4 @@ Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum
 Route::get('getUsers',[AuthController::class,'getUser']);
 Route::post('signup',[AuthController::class, 'signup']);
 Route::get('getProducts',[CategoryController::class,'getProducts']);
+Route::middleware('auth:sanctum')->get('user',[AuthController::class, 'user']);

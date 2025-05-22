@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\People;
 use Illuminate\Auth\RequestGuard;
-
+use Termwind\Components\Raw;
 
 class AuthController extends Controller
 {
@@ -131,5 +131,27 @@ class AuthController extends Controller
             'user' => $user,
             'message' => 'you have sucessfully logout '
         ],200);
+    }
+
+    public function user(Request $request)
+    {
+        $user = $request->user();
+        if(!$user){
+            return response()->json([
+                'status' => true,
+                'message' => 'user not found please login'
+            ],401);
+        };
+
+        return response()->json([
+            'status' => true ,
+            'user' => [
+                'id'=> $user->id,
+                'name' => $user->name,
+                'email'=> $user->email,
+            ],
+            'message' => 'user data'
+        ], 200
+        );
     }
 }

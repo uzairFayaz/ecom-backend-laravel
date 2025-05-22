@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\CategoryHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
@@ -19,8 +20,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.products.create', compact('categories'));
+        $categoryOptions = CategoryHelper::getCategoryOptions();
+        return view('admin.categories.create',compact('categoryOptions'));
     }
 
     public function store(Request $request)
@@ -40,8 +41,8 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $categories = Category::all();
-        return view('admin.products.edit', compact('product', 'categories'));
+       $categoryOptions = CategoryHelper::getCategoryOptions();
+       return view('admin.products.edit',compact('product','categoryOptions'));
     }
 
     public function update(Request $request, Product $product)

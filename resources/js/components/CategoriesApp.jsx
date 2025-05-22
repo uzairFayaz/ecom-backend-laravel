@@ -36,18 +36,45 @@ const CategoriesApp = () => {
         : [];
 
     if (loading) return <p>Loading...</p>;
+    const breadcrumbs = path.map((id, index) => ({
+        id,
+        name: categories[id]?.category_name,
+        isLast: index === path.length - 1,
+    }));
 
     return (
+
+
+        <>
+     
         <div className="p-4">
+            {/* Breadcrumb */}
+            {path.length > 0 && (
+                <nav className="text-sm text-indigo-600 mb-3">
+                    <span className="cursor-pointer text-blue-600" onClick={() => setPath([])}>Home</span>
+                    {breadcrumbs.map((crumb, index) => (
+                        <span key={crumb.id}>
+                            {' > '}
+                            {crumb.isLast ? (
+                                <span>{crumb.name}</span>
+                            ) : (
+                                <span
+                                    className="cursor-pointer text-indigo-600 hover:underline"
+                                    onClick={() => setPath(path.slice(0, index + 1))}
+                                >
+                                    {crumb.name}
+                                </span>
+                            )}
+                        </span>
+                    ))}
+                </nav>
+            )}
+            
             <h2 className="text-xl font-bold mb-2">
                 {currentCat ? currentCat.category_name : 'Categories'}
             </h2>
 
-            {path.length > 0 && (
-                <button onClick={() => setPath(path.slice(0, -1))} className="mb-2 px-2 py-1 bg-gray-200 rounded">
-                    Back
-                </button>
-            )}
+        
 
             {subcategories.length > 0 ? (
                 <div className="flex gap-2 mb-2">
@@ -77,7 +104,7 @@ const CategoriesApp = () => {
             ) : path.length > 0 && (
                 <p className="text-gray-500">No products found.</p>
             )}
-        </div>
+        </div></>
     );
 };
 

@@ -34,4 +34,8 @@ class Category extends Model
     {
         return $this->hasMany(Product::class,'category_id')->where('status','active');
     }
+    
+    public function childrenRecursive(){
+        return $this->children()->with('childrenRecursive');
+    }
 }
